@@ -19,8 +19,7 @@ public class SolverResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/{problemId}")
     public String solve(@PathParam("problemId") long problemId) {
-        String podName = "solver-pod-" + problemId;
-        podService.startPod("s2i", problemId);
+        String podName = podService.startPod("s2i", problemId);
         return "Pod " + podName + " started.";
     }
 }

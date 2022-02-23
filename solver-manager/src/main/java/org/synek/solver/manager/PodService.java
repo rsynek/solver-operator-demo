@@ -15,7 +15,7 @@ public class PodService {
     @Inject
     OpenShiftClient openShiftClient;
 
-    public void startPod(String namespace, long problemId) {
+    public String startPod(String namespace, long problemId) {
         String podName = getPodName(problemId);
         EnvVar envVar = new EnvVarBuilder()
                 .withName("PROBLEM_ID")
@@ -34,15 +34,16 @@ public class PodService {
                 .endSpec()
                 .build();
         Pod createdPod = openShiftClient.pods().inNamespace(namespace).createOrReplace(pod);
+        return createdPod.getMetadata().getName();
     }
 
-    public void deletePod(String namespace, long problemId) {
+    public boolean deletePod(String namespace, long problemId) {
         String podName = getPodName(problemId);
         Boolean isDeleted = openShiftClient.pods()
                 .inNamespace(namespace)
                 .withName(podName)
                 .delete();
-        System.out.println("Deleted a pod (" + podName + ") : " + isDeleted);
+        return isDeleted;
     }
 
     private String getPodName(long problemId) {
