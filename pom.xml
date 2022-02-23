@@ -9,9 +9,7 @@
   <packaging>pom</packaging>
   <version>1.0-SNAPSHOT</version>
   <modules>
-    <module>solver-pod</module>
     <module>solver-manager</module>
-    <module>solver-common</module>
   </modules>
 
   <properties>
@@ -40,12 +38,6 @@
         <groupId>io.quarkiverse.operatorsdk</groupId>
         <artifactId>quarkus-operator-sdk</artifactId>
         <version>${version.io.quarkiverse.operatorsdk}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.synek</groupId>
-        <artifactId>solver-common</artifactId>
-        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

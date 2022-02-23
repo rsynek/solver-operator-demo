@@ -1,4 +1,4 @@
-package org.synek.solver.common;
+package org.synek.solver.manager.messaging;
 
 public enum SolverEventType {
     SOLVER_REQUEST,

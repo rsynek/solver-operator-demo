@@ -13,10 +13,6 @@
 
   <dependencies>
     <dependency>
-      <groupId>org.synek</groupId>
-      <artifactId>solver-common</artifactId>
-    </dependency>
-    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-openshift-client</artifactId>
     </dependency>

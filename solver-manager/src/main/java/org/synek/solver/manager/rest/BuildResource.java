@@ -1,4 +1,4 @@
-package org.synek.solver.manager;
+package org.synek.solver.manager.rest;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -10,12 +10,15 @@ import io.fabric8.openshift.api.model.BuildConfig;
 import io.fabric8.openshift.api.model.BuildConfigBuilder;
 import io.fabric8.openshift.api.model.BuildRequest;
 import io.fabric8.openshift.api.model.BuildRequestBuilder;
+import io.fabric8.openshift.api.model.ImageStream;
+import io.fabric8.openshift.api.model.ImageStreamBuilder;
 import io.fabric8.openshift.client.OpenShiftClient;
 
 @Path("/build")
 public class BuildResource {
 
-    private static final String GIT_URL = "https://github.com/rsynek/solver-operator-demo.git";
+    private static final String GIT_URL = "https://github.com/rsynek/quickstart-school-timetabling.git";
+    private static final String NAME = "school-timetabling";
 
     @Inject
     private OpenShiftClient openShiftClient;
@@ -24,13 +27,18 @@ public class BuildResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/create")
     public String create() {
+        ImageStream imageStream = new ImageStreamBuilder()
+                .withNewMetadata().withName(NAME)
+                .endMetadata()
+                .build();
+        openShiftClient.imageStreams().createOrReplace(imageStream);
 
         BuildConfig buildConfig = new BuildConfigBuilder()
-                .withNewMetadata().withName("quickstart-school-timetabling").endMetadata()
+                .withNewMetadata().withName(NAME).endMetadata()
                 .withNewSpec()
                 .withNewSource()
                 .withType("Git")
-                .withContextDir("solver-pod")
+                //.withContextDir("solver-pod")
                 .withNewGit()
                 .withUri(GIT_URL)
                 .endGit()
@@ -46,7 +54,7 @@ public class BuildResource {
                 .endStrategy()
                 .withNewOutput()
                 .withNewTo().withKind("ImageStreamTag")
-                .withName("quickstart-school-timetabling:latest") // TODO: create an image stream first.
+                .withName(NAME + ":latest") // TODO: create an image stream first.
                 .endTo()
                 .endOutput()
                 .endSpec()
@@ -56,10 +64,10 @@ public class BuildResource {
 
         BuildRequest buildRequest = new BuildRequestBuilder()
                 .withNewMetadata()
-                .withGenerateName("quickstart-school-timetabling")
+                .withGenerateName(NAME)
                 .endMetadata()
                 .build();
-        openShiftClient.buildConfigs().withName("quickstart-school-timetabling").instantiate(buildRequest);
+        openShiftClient.buildConfigs().withName(NAME).instantiate(buildRequest);
 
         return buildConfig.getMetadata().getName();
     }

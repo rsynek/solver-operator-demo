@@ -1,16 +1,21 @@
-package org.synek.solver.common;
+package org.synek.solver.manager.messaging;
 
 public class SolverEvent {
-    private Long ProblemId;
+
+    private Long problemId;
     private SolverEventType solverEventType;
 
+    public SolverEvent() {
+        // Used by Jackson
+    }
+
     public SolverEvent(Long problemId, SolverEventType solverEventType) {
-        ProblemId = problemId;
+        this.problemId = problemId;
         this.solverEventType = solverEventType;
     }
 
     public Long getProblemId() {
-        return ProblemId;
+        return problemId;
     }
 
     public SolverEventType getSolverEventType() {
